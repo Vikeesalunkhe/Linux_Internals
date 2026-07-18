@@ -1,18 +1,3 @@
-/*
- * word_count.c
- *
- * A simplified 'wc' implementation using raw system calls
- * (open, read, write, close) instead of standard I/O buffered functions.
- *
- * Usage:
- *   ./word_count                     -> reads from stdin till EOF (Ctrl+D)
- *   ./word_count file.txt            -> counts lines/words/bytes of file
- *   ./word_count f1.txt f2.txt ...   -> counts each file + prints total
- *   ./word_count -l -w -c [files]    -> print only selected counts
- *
- * Compile:
- *   gcc -Wall -o word_count main.c
- */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,17 +6,9 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#define BUF_SIZE 4096
+#define BUF_SIZE 200
 
-/*
- * word_count()
- * -------------
- * Reads from the given file descriptor till EOF and calculates
- * the number of lines, words and bytes (characters) read.
- * Results are stored in the caller-supplied addresses.
- *
- * Returns 0 on success, -1 on a read error.
- */
+
 int word_count(int fd, int *lines, int *words, int *bytes)
 {
     char buf[BUF_SIZE];
@@ -71,12 +48,7 @@ int word_count(int fd, int *lines, int *words, int *bytes)
     return 0;
 }
 
-/*
- * print_values()
- * ---------------
- * Prints the requested counts (based on show_l/show_w/show_c flags)
- * followed by the file name (if provided, i.e. non-NULL).
- */
+
 void print_values(int lines, int words, int bytes,
                    int show_l, int show_w, int show_c,
                    const char *name)
