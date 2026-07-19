@@ -24,3 +24,55 @@ Process 1234 cleared by init  (After some time)
 
 */
 
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+
+int main() {
+
+      pid_t pid = fork();
+
+      if (pid > 0){
+
+            sleep(2);
+            char path[50];
+
+            sprintf(path, "cat /proc/%d/status | head -2", pid);
+            printf("%s\n", path);
+
+            system(path);
+
+            int pid1 = fork();
+
+            if (pid1 > 0){
+
+                  printf("Process %d cleared by init\n", pid);
+                  sleep(2);
+                  exit(1);
+            }
+      }
+      else if (pid == 0){
+
+            char path[50];
+            int ret = getpid();
+
+            printf("Chiled created with pid %d\n", ret);
+
+            sprintf(path, "cat /proc/%d/status | head -3", ret);
+            printf("%s\n", path);
+            system(path);
+            exit(1);
+      }
+      else 
+      {
+            perror("Fork");
+            exit(1);
+      }
+
+      return 0;
+
+}
+
